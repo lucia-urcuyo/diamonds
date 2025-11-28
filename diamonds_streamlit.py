@@ -278,6 +278,28 @@ def build_model_tab(models: Dict[str, Dict[str, object]]):
         st.markdown(f"#### {bundle['label']}")
         st.caption(f"Loaded from {MODEL_DIR / f'{key}_model.json'}")
 
+        importances = pd.DataFrame(
+            {
+                "feature": bundle["feature_order"],
+                "importance": bundle["model"].feature_importances_,
+            }
+        ).sort_values("importance", ascending=False)
+
+        chart = (
+            alt.Chart(importances)
+            .mark_bar()
+            .encode(
+                x=alt.X("importance:Q", title="Feature importance"),
+                y=alt.Y("feature:N", sort="-x", title="Feature"),
+                tooltip=[
+                    alt.Tooltip("feature:N", title="Feature"),
+                    alt.Tooltip("importance:Q", title="Importance", format=".4f"),
+                ],
+            )
+            .properties(height=300)
+        )
+        st.altair_chart(chart, use_container_width=True)
+
 
 def main():
     st.set_page_config(page_title="Diamond Pricing Explorer", layout="wide")
