@@ -78,13 +78,11 @@ def build_models(df_lab: pd.DataFrame, df_nat: pd.DataFrame) -> Dict[str, Dict[s
     return {
         "lab": {
             "model": lab_model,
-            "label": "Lab-Grown Model",
             "feature_order": feature_order,
             "category_mapping": category_mapping,
         },
         "natural": {
             "model": nat_model,
-            "label": "Natural Model",
             "feature_order": feature_order,
             "category_mapping": category_mapping,
         },
@@ -270,8 +268,6 @@ def build_predictor_tab(models: Dict[str, Dict[str, object]], df_full: pd.DataFr
 
     col_a, col_b = st.columns(2)
     col_a.metric("Estimated Price", format_currency(prediction))
-    col_b.metric("Model", models[model_key]["label"])
-
 
 def build_model_tab(models: Dict[str, Dict[str, object]]):
     st.subheader("Models Loaded")
